@@ -1,0 +1,171 @@
+/**
+ * DEBUG STYLE v2.0
+ * Помогает выявлять проблемы с доступностью, семантикой и адаптивностью
+ * Добавлять в <head> перед другими стилями или через DevTools
+ */
+
+/* Базовые проблемы доступности */
+:where(
+  img:not([alt]),                    /* Изображения без alt */
+  img[alt=""],                       /* Пустые alt (когда нужно описание) */
+  button:not([type]),                /* Кнопки без type */
+  a:not([href]),                     /* Ссылки без href */
+  a[href="#"],                       /* Пустые якорные ссылки */
+  input:not([id]),                   /* Инпуты без id */
+  label:not([for]),                  /* Лейблы без связи с инпутом */
+  [role]:not([aria-label]):not([aria-labelledby]), /* Элементы с ролью без метки */
+  [aria-*]:not([role])               /* ARIA без роли */
+) {
+  outline: 3px solid #ff0000 !important;
+  position: relative;
+  overflow: visible !important;
+}
+
+/* Семантические проблемы */
+:where(
+  div[onclick],                      /* Дивы с обработчиками клика */
+  span[onclick],                     /* Спаны с обработчиками клика */
+  header:not(:first-child),          /* Не первый header */
+  h1:not(:first-child),              /* Не первый h1 */
+  h2 + h4,                           /* Пропуск уровня заголовка */
+  section:not([aria-label]):not([aria-labelledby]), /* Секции без метки */
+  table:not([summary])               /* Таблицы без описания */
+) {
+  outline: 3px solid #ff9900 !important;
+}
+
+/* Проблемы адаптивности */
+:where(
+  [style*="width:"],                 /* Инлайновые ширины */
+  [style*="height:"],                /* Инлайновые высоты */
+  img:not([width]),                  /* Изображения без width */
+  img:not([height]),                 /* Изображения без height */
+  .overflow-hidden,                  /* Возможное обрезание контента */
+  .overflow-x-auto                  /* Горизонтальный скролл */
+) {
+  outline: 3px solid #0099ff !important;
+}
+
+/* Контрастность и читаемость */
+:where(
+  [style*="color:"][style*="background:"], /* Инлайновые цвета */
+  .text-white,                       /* Белый текст */
+  .text-black,                       /* Чёрный текст */
+  .bg-black,                         /* Чёрный фон */
+  .bg-white                          /* Белый фон */
+) {
+  outline: 3px solid #00cc66 !important;
+}
+
+/* Устаревшие элементы */
+:where(
+  font,                              /* Устаревший тег <font> */
+  center,                            /* Устаревший тег <center> */
+  [align],                           /* Устаревший атрибут align */
+  [bgcolor],                         /* Устаревший атрибут bgcolor */
+  [border],                          /* Устаревший атрибут border */
+  [valign]                           /* Устаревший атрибут valign */
+) {
+  outline: 3px solid #9966ff !important;
+}
+
+/* Подсказки для проблемных элементов */
+:where(
+  img:not([alt])::after,
+  button:not([type])::after,
+  a:not([href])::after,
+  input:not([id])::after,
+  [role]:not([aria-label]):not([aria-labelledby])::after
+) {
+  content: "⚠️ DEBUG: " attr(class);
+  display: block;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #ff0000;
+  color: white !important;
+  padding: 2px 5px;
+  font-size: 12px;
+  font-family: monospace;
+  white-space: nowrap;
+  z-index: 9999;
+}
+
+/* Специфичные подсказки */
+img:not([alt])::after { content: "⚠️ DEBUG: Нет alt текста"; }
+button:not([type])::after { content: "⚠️ DEBUG: Кнопка без type"; }
+a:not([href])::after { content: "⚠️ DEBUG: Ссылка без href"; }
+input:not([id])::after { content: "⚠️ DEBUG: Инпут без id"; }
+
+/* Выделение лэйаутных проблем */
+body * {
+  box-shadow: 0 0 0 1px rgba(0, 200, 255, 0.1) !important;
+}
+
+/* Подсветка margin/padding */
+.debug-box-model * {
+  outline-offset: -1px;
+  box-shadow: 
+    0 0 0 1px rgba(255, 0, 0, 0.5),
+    0 0 0 1px rgba(0, 255, 0, 0.5) inset;
+}
+
+.debug-box-model *::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-shadow: 
+    0 0 0 1px rgba(0, 0, 255, 0.5),
+    0 0 0 1px rgba(255, 255, 0, 0.5) inset;
+  pointer-events: none;
+}
+
+/* Включение по классу на body */
+body.debug-mode {
+  min-height: 100vh;
+  background: rgba(0, 0, 0, 0.01) !important;
+}
+
+body.debug-mode * {
+  animation: debug-pulse 2s infinite alternate;
+}
+
+@keyframes debug-pulse {
+  0% { opacity: 1; }
+  100% { opacity: 0.8; }
+}
+
+
+
+// --------------------
+/* Подсветка проблемных элементов */
+:where(
+  img:not([alt]),
+  button:not([type]),
+  a:not([href]),
+  [role]:not([aria-label]),
+  h1 + h3,
+  div[role="button"],
+  input:not([id])
+) {
+  outline: 2px dashed red !important;
+  position: relative;
+}
+
+/* Добавление подсказки */
+[role]:not([aria-label])::after {
+  content: "⚠️ Нет aria-label!";
+  color: red;
+}
+
+// ------------------------
+button:not([type]),
+img:not([alt]),
+img:not([width]),
+img:not([height]){
+   outline: 10px dashed red;
+   outline-offset: 5px;
+}
